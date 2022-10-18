@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -29,13 +31,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       // get trending
       final _result = await _downloadsService.getDownloadsImage();
-      final _state = _result.fold((MainFailure f) {
-        return SearchState(
+      final _state = _result.fold(
+        (MainFailure f) {
+        return const SearchState(
             searchResultList: [],
             idleList: [],
             isError: true,
             isLoading: false);
-      }, (List<Downloads> list) {
+      }, 
+      (List<Downloads> list) {
         return SearchState(
           searchResultList: [],
           idleList: list,
@@ -46,9 +50,33 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(_state);
     });
 
-    on<SearchMovies>((event, emit) {
+    on<SearchMovies>((event, emit) async{
+      
       // call api
-      _searchService.searchMovies(movieQuery: event.movieQuery);
+      log('Searching for ${event.movieQuery}');
+       emit(const SearchState(
+            searchResultList: [],
+            idleList: [],
+            isLoading: true,
+            isError: false));
+
+    final _result = await  _searchService.searchMovies(movieQuery: event.movieQuery);
+    final _state =_result.fold(
+      (MainFailure f) {
+         return const SearchState(
+            searchResultList: [],
+            idleList: [],
+            isLoading: false,
+            isError: true);
+      }, 
+    (SearchResp r) {
+       return SearchState(
+            searchResultList: r.results,
+            idleList: [],
+            isLoading: false,
+            isError: false);
+    });
+    emit(_state);
     });
   }
 }

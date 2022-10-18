@@ -21,13 +21,17 @@ class SearchImpl implements SearchService{
     'query':movieQuery,
       }
     );
+    log(response.data.toString());
     if(response.statusCode == 200 || response.statusCode == 201){
       final result = SearchResp.fromJson(response.data);
      return  Right(result);
     }else{
       return const Left(MainFailure.serverFailure() );
     }
-
+       }
+       on DioError catch(e){
+        log(e.toString());
+        return const Left(MainFailure.clientFailure() );
        }
        catch(e){
         log(e.toString());

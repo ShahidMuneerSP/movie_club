@@ -77,18 +77,29 @@ class Section2 extends StatelessWidget {
         Khight,
         BlocBuilder<DownloadsBloc, DownloadsState>(
           builder: (context, state) {
-            return
-             SizedBox(
+            if(state.downloads.isEmpty){
+                  return const Center(child:Text("download list is empty"));
+            }
+            
+           return
+                      
+  SizedBox(
               width: size.width,
               height: size.width,
-              child: state.isLoading ?    const Center(child: CircularProgressIndicator()): Stack(
+              child: state.isLoading   ? 
+              const Center(child: CircularProgressIndicator())
+                      :
+               Stack(
                 alignment: Alignment.center, 
                 children: [
-                  
-                CircleAvatar(
+                    
+               CircleAvatar(
+                    
                     radius: size.width * 0.39,
                     backgroundColor: Colors.grey[900]),
+                   
                 DownloadsImageWidget(
+                  
                   imageList:'$imageAppendUrl${state.downloads[0].posterPath}',
                   size: Size(size.width * 0.35, size.width * 0.55),
                   margin: const EdgeInsets.only(left: 170, top: 40),
@@ -106,6 +117,7 @@ class Section2 extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 10, top: 40),
                   radius: 8,
                 ),
+      
               ]),
             );
            }

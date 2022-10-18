@@ -6,8 +6,9 @@ import 'package:movie_club/core/constants.dart';
 
 
 class NumberCard extends StatelessWidget {
-  const NumberCard({Key? key, required this.index}) : super(key: key);
+  const NumberCard({Key? key, required this.index, required this.imageUrl}) : super(key: key);
 final int index;
+final String imageUrl;
   @override
   Widget build(BuildContext context) {
     return  Stack(
@@ -24,9 +25,9 @@ final int index;
           decoration:
            BoxDecoration(
              borderRadius: KRadius10,
-           image: const DecorationImage(
+           image:  DecorationImage(
             fit: BoxFit.cover,
-             image:NetworkImage("https://www.themoviedb.org/t/p/w600_and_h900_bestv2/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",),
+             image:NetworkImage(imageUrl),
              ),
               ),
           ),
